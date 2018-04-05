@@ -1,0 +1,21 @@
+---
+
+- name: install python 2
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- name: install python 3
+  raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+
+- name: Install base packages needed for scanner la
+  apt: 
+     name={{item}}
+     state=installed 
+     update_cache={{ update_apt_cache }}
+  with_items:
+          - build-essential
+          - git
+          - python-pip
+
+- name: Install Scrapy using pip
+  pip:
+    name: scrapy
