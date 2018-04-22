@@ -15,5 +15,6 @@ class Helper:
 		for f in forms:
 			form_list.append(HtmlForm(url, f))
 		
+		print "[{0} Forms] <- {1}".format(len(form_list), url)
 		return form_list
 

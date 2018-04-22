@@ -1,5 +1,9 @@
 from Helpers import Helper
 from Endpoint import Endpoint
+from AttackModule import AttackModule
+from LfiAttackModule import LfiAttackModule
+from RfiAttackModule import RfiAttackModule
+from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 
 # Run the webspider, from the list of URLs obtained, build the Endpoints
 # Assume the list below is the list of URLs crawled and returned to us.
@@ -29,8 +33,13 @@ endpoints = []
 for url in crawledUrls:
 	endpoints.append(Endpoint(url, "GET"))
 
+print "========================================================="
+print "Crawled {0} endpoints!".format(len(endpoints))
+print ""
+
 
 print "========================================================="
+print "Revisiting endpoints to check if forms are present"
 # We can then crawl all the endpoints to look for forms in each of them
 forms = []
 for endpoint in endpoints:
@@ -38,10 +47,40 @@ for endpoint in endpoints:
 
 for form in forms:
 	endpoints.append(form.get_endpoint())
-	
+
+
 
 print "========================================================="
-print "Visited endpoints {"
+print "Selected attack modules:"
+attack_modules = [
+	LfiAttackModule(),
+	RfiAttackModule(),
+	ShlCmdInjAttackModule()
+]
+for module in attack_modules:
+	print module
+print ""
+
+print "========================================================="
+print "Trying to attack endpoints with forms"
 for endpoint in endpoints:
-	print endpoint
-print "}"
+	if endpoint.is_form():
+		for module in attack_modules:
+			module.attack(endpoint)
+print ""
+
+print "========================================================="
+print "Trying to attack endpoints with query strings"
+for endpoint in endpoints:
+	if endpoint.has_query_string():
+		for module in attack_modules:
+			module.attack(endpoint)
+print ""
+
+
+
+#print "========================================================="
+#print "Visited endpoints {"
+#for endpoint in endpoints:
+#	print endpoint
+#print "}"
