@@ -4,10 +4,21 @@ from Endpoint import Endpoint
 # Run the webspider, from the list of URLs obtained, build the Endpoints
 # Assume the list below is the list of URLs crawled and returned to us.
 crawledUrls = [
-	"https://indianvisaonline.gov.in/evisa/Registration", 
-	"https://indianvisaonline.gov.in/evisa/CompletePartially", 
-	"https://indianvisaonline.gov.in/evisa/PaymentCheck", 
-	"https://indianvisaonline.gov.in/evisa/PrintApplication"
+	"http://www.wsb.com", 
+	"http://www.wsb.com/index.html.orig", 
+	"http://www.wsb.com/Assignment2/", 
+	"http://www.wsb.com/Assignment2/sample/sample.php", 
+	"http://www.wsb.com/Assignment2/case01.php",
+	"http://www.wsb.com/Assignment2/case02.php",
+	"http://www.wsb.com/Assignment2/case03/case03.php",
+	"http://www.wsb.com/Assignment2/case04.php",
+	"http://www.wsb.com/Assignment2/case05.php",
+	"https://www.wsb.com/Assignment2/case06.php",
+	"http://www.wsb.com/Assignment2/case07.php",
+	"http://www.wsb.com/Assignment2/case08.php",
+	"http://www.wsb.com/Assignment2/case09.php",
+	"http://www.wsb.com/Assignment2/case10-2.php",
+	"http://www.wsb.com/Assignment2/case10.php",
 ]
 
 
