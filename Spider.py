@@ -6,8 +6,8 @@ url = []
 
 class Crawler(CrawlSpider):
 	name = "Crawler"
-	allowed_domains = ['www.wsb.com']
-	start_urls = ['http://www.wsb.com']
+	allowed_domains = ['target.com']
+	start_urls = ['http://target.com']
 
 	rules = (
 		Rule(LinkExtractor(), callback='parse_item', follow=True),

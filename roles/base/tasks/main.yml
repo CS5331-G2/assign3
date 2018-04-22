@@ -15,15 +15,25 @@
           - build-essential
           - git
           - python-pip
+          - unzip
 
-- name: Install Scrapy using pip
+- name: Install spider dependencies using pip
   pip:
-    name: scrapy
+    name={{item}}
+  with_items:
+    - scrapy
+    - bs4
+    - requests
 
-- name: Install Beautifulsoup using pip
-  pip:
-    name: bs4
+- name: Copy html.zip to /home/vagrant
+  copy:
+    src: /Users/macos/Dropbox (Personal)/1. NUS/SourceCode/CS5331/assign3/html.zip
+    dest: /home/vagrant
 
-- name: Install Requests using pip
-  pip:
-    name: requests
+# - name: Unzip html.zip
+#   unarchive: 
+#     src: /home/vagrant/html.zip
+#     dest: /home/vagrant/
+
+# - name: Install html.zip setup.sh
+#   command: ./home/vagrant/html/setup.sh
