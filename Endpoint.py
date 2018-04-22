@@ -29,7 +29,17 @@ class Endpoint(object):
 		return self.scheme + "://" + self.host + self.path
 
 	def has_query_string(self):
-		return self.query.__len__() > 0
+		try:
+			self.path.index("?") >= 0
+			return True
+		except:
+			return False
+
+	def get_query_string(self):
+		if self.has_query_string():
+			return self.path[self.path.index("?") + 1:]
+		else:
+			return "";
 
 	def __str__(self):
 		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\nFORM: {4}\n}}" \
