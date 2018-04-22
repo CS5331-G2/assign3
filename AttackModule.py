@@ -1,8 +1,9 @@
 
 class AttackModule(object):
 	
-	def __init__(self, moduleName):
+	def __init__(self, moduleName, attackClass):
 		self.moduleName = moduleName
+		self.attackClass = attackClass
 
 	def __str__(self):
-		return "{0} Attack Module".format(self.moduleName)
+		return "{0} Attack Module, Class: {1}".format(self.moduleName, self.attackClass)

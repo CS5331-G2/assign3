@@ -1,7 +1,6 @@
 from AttackModule import AttackModule
-from LfiAttackModule import LfiAttackModule
 
-class RfiAttackModule(LfiAttackModule):
+class RfiAttackModule(AttackModule):
 	
 	def __init__(self):
-		AttackModule.__init__(self, "Remote File Inclusion")
+		AttackModule.__init__(self, "Remote File Inclusion", "Server Side Code Injection")
