@@ -7,8 +7,9 @@ class Helper:
 		import requests
 		from bs4 import BeautifulSoup
 		from HtmlForm import HtmlForm
-
-		parser = BeautifulSoup(requests.get(url).text, "html.parser")
+		
+		# WARNING: SSL Verification has been intentionally disabled!
+		parser = BeautifulSoup(requests.get(url, verify=False).text, "html.parser")
 		forms = parser.findAll("form")
 		form_list = []
 		for f in forms:
