@@ -6,8 +6,8 @@ url = []
 
 class Crawler(CrawlSpider):
 	name = "Crawler"
-	allowed_domains = ['indianvisaonline.gov.in']
-	start_urls = ['https://indianvisaonline.gov.in/evisa/Registration']
+	allowed_domains = ['www.wsb.com']
+	start_urls = ['http://www.wsb.com']
 
 	rules = (
 		Rule(LinkExtractor(), callback='parse_item', follow=True),
