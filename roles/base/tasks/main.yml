@@ -19,3 +19,11 @@
 - name: Install Scrapy using pip
   pip:
     name: scrapy
+
+- name: Install Beautifulsoup using pip
+  pip:
+    name: bs4
+
+- name: Install Requests using pip
+  pip:
+    name: requests

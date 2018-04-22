@@ -4,6 +4,8 @@ from AttackModule import AttackModule
 from LfiAttackModule import LfiAttackModule
 from RfiAttackModule import RfiAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
+from Spider import Crawler
+from scrapy.crawler import CrawlerProcess
 
 # Run the webspider, from the list of URLs obtained, build the Endpoints
 # Assume the list below is the list of URLs crawled and returned to us.
@@ -24,6 +26,20 @@ crawledUrls = [
 	"http://www.wsb.com/Assignment2/case10-2.php",
 	"http://www.wsb.com/Assignment2/case10.php",
 ]
+spider = Crawler()
+process = CrawlerProcess({
+			'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+			})
+process.crawl(spider)
+process.start()
+crawledUrls = spider.getItems()
+
+# crawledUrls = [
+# 	"https://indianvisaonline.gov.in/evisa/Registration", 
+# 	"https://indianvisaonline.gov.in/evisa/CompletePartially", 
+# 	"https://indianvisaonline.gov.in/evisa/PaymentCheck", 
+# 	"https://indianvisaonline.gov.in/evisa/PrintApplication"
+# ]
 
 
 
