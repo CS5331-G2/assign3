@@ -29,12 +29,6 @@ endpoints = []
 for url in crawledUrls:
 	endpoints.append(Endpoint(url, "GET"))
 
-print "========================================================="
-print "Visited endpoints {"
-for endpoint in endpoints:
-	print endpoint
-print "}"
-
 
 print "========================================================="
 # We can then crawl all the endpoints to look for forms in each of them
@@ -43,4 +37,11 @@ for endpoint in endpoints:
 	forms.extend(Helper.form_scrapper(endpoint.url))
 
 for form in forms:
-	print form
+	endpoints.append(form.get_endpoint())
+	
+
+print "========================================================="
+print "Visited endpoints {"
+for endpoint in endpoints:
+	print endpoint
+print "}"
