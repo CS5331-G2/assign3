@@ -27,7 +27,9 @@ class HtmlForm(HtmlElement):
 	def get_endpoint(self):
 		e = Endpoint(self.url, self.method)
 		targetUrl = urlparse.urljoin(e.get_url_till_path(), self.action)
-		return Endpoint(targetUrl, self.method)
+		formEndpoint = Endpoint(targetUrl, self.method)
+		formEndpoint.mark_as_form()
+		return formEndpoint
 
 	def __str__(self):
 		return "HTML Form {{\nPage: {0}\nMethod: {1} Action: {2}\n".format(self.url, self.method, self.action) + "\n" + \

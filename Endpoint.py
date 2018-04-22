@@ -17,10 +17,21 @@ class Endpoint(object):
 		if parser.query.__len__() > 0 :
 			self.path = parser.path + "?" + parser.query
 		self.method = method
+		self.isForm = False
+
+	def mark_as_form(self):
+		self.isForm = True
+
+	def is_form(self):
+		return self.isForm
 
 	def get_url_till_path(self):
 		return self.scheme + "://" + self.host + self.path
 
+	def has_query_string(self):
+		return self.query.__len__() > 0
+
 	def __str__(self):
-		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\n}}".format(self.url, self.method, self.path, self.host)
+		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\nFORM: {4}\n}}" \
+				.format(self.url, self.method, self.path, self.host, self.isForm)
 
