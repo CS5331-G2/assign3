@@ -35,20 +35,30 @@ for url in crawledUrls:
 print "========================================================="
 print "Crawled {0} endpoints!".format(len(endpoints))
 print ""
-
-
+print "========================================================="
+print "Revisiting endpoints for missed out href"
+tempURL =[]
+foundURL = []
+for endpoint in endpoints:
+	tempURL.append(endpoint.url)
+	foundURL.extend(Helper.href_scraper(endpoint.url))
+# prevent adding duplicate in list
+seen = set(tempURL)
+for u in foundURL:
+	if u not in seen:
+		seen.add(u)
+		endpoints.append(Endpoint(u, "GET"))
+		print "Added --> {0}".format(u)
+print ""
 print "========================================================="
 print "Revisiting endpoints to check if forms are present"
 # We can then crawl all the endpoints to look for forms in each of them
 forms = []
 for endpoint in endpoints:
 	forms.extend(Helper.form_scrapper(endpoint.url))
-	Helper.href_scraper(endpoint.url)
 
 for form in forms:
 	endpoints.append(form.get_endpoint())
-
-
 
 print "========================================================="
 print "Selected attack modules:"

@@ -26,9 +26,10 @@ class Helper:
 
 		soup = BeautifulSoup(requests.get(url, verify=False).text, "html.parser")
 
+		url_list = []
 		for a in soup.findAll('a', href=True):
-			print urljoin(url, a['href'])
-			print a['href']
+			url_list.append(urljoin(url, a['href']))
+		return url_list
 
 
 	@staticmethod
