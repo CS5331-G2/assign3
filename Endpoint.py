@@ -30,7 +30,7 @@ class Endpoint(object):
 		return self.htmlForm
 
 	def get_url_till_path(self):
-		return self.scheme + "://" + self.host + self.path
+		return self.scheme + "://" + self.host + self.get_path()
 
 	def has_query_string(self):
 		try:
