@@ -1,8 +1,7 @@
 from Helpers import Helper
 from Endpoint import Endpoint
 from AttackModule import AttackModule
-from LfiAttackModule import LfiAttackModule
-from RfiAttackModule import RfiAttackModule
+from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from AttackReport import AttackReport
 from Spider import Crawler
@@ -57,8 +56,8 @@ print "Selected attack modules:"
 # respective attacks.
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
-	#RfiAttackModule(),
-	ShlCmdInjAttackModule()
+	ShlCmdInjAttackModule(),
+	DirTravAttackModule()
 ]
 for module in attack_modules:
 	print module

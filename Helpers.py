@@ -28,8 +28,7 @@ class Helper:
 	@staticmethod
 	def do_get_request(endpoint, dictHeaders, dictFormData):
 		import requests
-		return requests.get(endpoint.url, headers=dictHeaders, data=dictFormData)
-
+		return requests.get(endpoint.url, headers=dictHeaders, params=dictFormData)
 
 	@staticmethod
 	def generate_attack_report():
