@@ -3,6 +3,7 @@ from Endpoint import Endpoint
 from AttackModule import AttackModule
 from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
+from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
 from Spider import Crawler
 from scrapy.crawler import CrawlerProcess
@@ -68,7 +69,8 @@ print "Selected attack modules:"
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
 	ShlCmdInjAttackModule(),
-	DirTravAttackModule()
+	DirTravAttackModule(),
+	OpenRedirAttackModule()
 ]
 for module in attack_modules:
 	print module
