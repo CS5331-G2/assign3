@@ -8,6 +8,8 @@ from AttackReport import AttackReport
 from Spider import Crawler
 from scrapy.crawler import CrawlerProcess
 
+import json
+
 # disable verbosive logs from our libraries
 import logging
 logging.getLogger("requests").setLevel(logging.CRITICAL + 1)
@@ -93,8 +95,9 @@ print ""
 
 print "========================================================="
 print "Total number of attacks: {0}".format(len(AttackReport.attacks))
-for attack in AttackReport.attacks:
-	print attack
-
+#for attack in AttackReport.attacks:
+#	print attack
+report = Helper.generate_attack_report();
+print json.dumps(report, default=AttackReport.serialize, indent=2)
 
 

@@ -3,8 +3,18 @@ import json
 class AttackReport(object):
 	attacks = []
 
+	@staticmethod
 	def add_attack_report(attackReport):
 		AttackReport.attacks.append(attackReport)
+
+	@staticmethod
+	def get_attack_report_by_class(attackClass):
+		results = []
+		for attack in AttackReport.attacks:
+			print attack.attackClass
+			if attack.attackClass == attackClass:
+				results.append(attack)
+		return results
 
 	def __init__(self, attackClass, endpoint, headers, formData):
 		self.attackClass = attackClass
@@ -26,12 +36,15 @@ class AttackReport(object):
 			s['method'] = self.endpoint.method
 		return s
 
-	def __str__(self):
+	def serialize(obj):
 		s = {}
-		s['class'] = self.attackClass
-		s['endpoint'] = self.endpoint.url
-		s['method'] = self.endpoint.method
-		s['params'] = self.formData
-		if self.attackClass == "Command Injection":
-			s['endpoint'] = self.endpoint.get_path()
-		return json.dumps(s, indent=2)
+		s['class'] = obj.attackClass
+		s['endpoint'] = obj.endpoint.url
+		s['method'] = obj.endpoint.method
+		s['params'] = obj.formData
+		if obj.attackClass == "Command Injection":
+			s['endpoint'] = obj.endpoint.get_path()
+		return s
+
+	def __str__(self):
+		return json.dumps(self.serialize(), indent=2)
