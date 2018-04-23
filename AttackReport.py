@@ -11,16 +11,16 @@ class AttackReport(object):
 	def get_attack_report_by_class(attackClass):
 		results = []
 		for attack in AttackReport.attacks:
-			print attack.attackClass
 			if attack.attackClass == attackClass:
 				results.append(attack)
 		return results
 
-	def __init__(self, attackClass, endpoint, headers, formData):
+	def __init__(self, attackClass, endpoint, headers, formData, formId):
 		self.attackClass = attackClass
 		self.endpoint = endpoint
 		self.headers = headers
 		self.formData = formData
+		self.formId = formId
 
 	def get_attack_class(self):
 		return self.attackClass
@@ -42,7 +42,10 @@ class AttackReport(object):
 		s['endpoint'] = obj.endpoint.url
 		s['method'] = obj.endpoint.method
 		s['params'] = obj.formData
-		if obj.attackClass == "Command Injection":
+		if obj.attackClass == "CSRF":
+			#some other form of parsing needed?
+			s['form_id'] = obj.formId
+		else:
 			s['endpoint'] = obj.endpoint.get_path()
 		return s
 

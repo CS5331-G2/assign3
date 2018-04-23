@@ -98,7 +98,7 @@ class ShlCmdInjAttackModule(AttackModule):
 				res = Helper.do_post_request(endpoint, headers, formData)
 
 			if self.is_attack_successful(res):
-				report = AttackReport(self.attackClass, endpoint, headers, formData)
+				report = AttackReport(self.attackClass, endpoint, headers, formData, "")
 				AttackReport.add_attack_report(report)
 				return True
 
