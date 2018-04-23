@@ -45,6 +45,12 @@ class Endpoint(object):
 		else:
 			return "";
 
+	def get_path(self):
+		if self.has_query_string():
+			return self.path[:self.path.index("?")]
+		else:
+			return self.path;
+
 	def get_query_string_dict(self):
 		query_string_dict = {}		
 		qs = self.get_query_string()
@@ -55,6 +61,12 @@ class Endpoint(object):
 				if len(data) == 2:
 					query_string_dict[data[0]] = data[1]
 		return query_string_dict
+
+	def get_scheme_and_host_url(self):
+		return "{0}://{1}".format(self.scheme, self.host)
+
+	def get_path_and_query_string(self):
+		return self.path
 
 	def __str__(self):
 		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\nFORM: {4}\n}}" \
