@@ -1,5 +1,6 @@
 from AttackModule import AttackModule
 from Helpers import Helper
+from AttackReport import AttackReport
 
 # Dangerous inputs for PHP based web servers
 # https://www.kevinlondon.com/2015/07/26/dangerous-python-functions.html
@@ -58,13 +59,13 @@ class ShlCmdInjAttackModule(AttackModule):
 		
 
 	def attack(self, endpoint):
+		print "    Beginning attack -> Shell Command Injection"
 		self.attack_succeeded = False
 		self.attack_report = None
 		if True not in (endpoint.is_form(), endpoint.has_query_string()):
 			print "    Target: {0}\n    Is not a form, nor a has a query string. Skipping!".format(endpoint.url)
 			return
 		
-		print "    Beginning attack -> Shell Command Injection"
 		totalAttacks = len(ShlCmdInjAttackModule.attackPatterns)
 		attackCounter = 1
 		for attackPattern in ShlCmdInjAttackModule.attackPatterns:
@@ -85,13 +86,10 @@ class ShlCmdInjAttackModule(AttackModule):
 	
 	def launch_attack(self, endpoint, payload):
 		headers = {}
-		formData = {}
-		if endpoint.is_form():
-			formData = endpoint.get_form().get_form_data_dict()
-		elif endpoint.has_query_string():
-			formData = endpoint.get_query_string_dict()
+		formData = self.get_form_data(endpoint)
 		
 		for key in formData.keys():
+			formData = self.get_form_data(endpoint)
 			formData[key] = payload
 			res = None
 			if endpoint.method.upper() == "GET":
@@ -100,10 +98,19 @@ class ShlCmdInjAttackModule(AttackModule):
 				res = Helper.do_post_request(endpoint, headers, formData)
 
 			if self.is_attack_successful(res):
-				#record results
+				report = AttackReport(self.attackClass, endpoint, headers, formData, "")
+				AttackReport.add_attack_report(report)
 				return True
 
 		return False
+
+	def get_form_data(self, endpoint):
+		formData = {}
+		if endpoint.is_form():
+			formData = endpoint.get_form().get_form_data_dict()
+		elif endpoint.has_query_string():
+			formData = endpoint.get_query_string_dict()
+		return formData
 
 	def is_attack_successful(self, res):
 		if res.ok:

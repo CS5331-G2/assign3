@@ -4,8 +4,11 @@ from AttackModule import AttackModule
 from LfiAttackModule import LfiAttackModule
 from RfiAttackModule import RfiAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
+from AttackReport import AttackReport
 from Spider import Crawler
 from scrapy.crawler import CrawlerProcess
+
+import json
 
 # disable verbosive logs from our libraries
 import logging
@@ -90,8 +93,11 @@ for endpoint in endpoints:
 print ""
 
 
-#print "========================================================="
-#print "Visited endpoints {"
-#for endpoint in endpoints:
-#	print endpoint
-#print "}"
+print "========================================================="
+print "Total number of attacks: {0}".format(len(AttackReport.attacks))
+#for attack in AttackReport.attacks:
+#	print attack
+report = Helper.generate_attack_report();
+print json.dumps(report, default=AttackReport.serialize, indent=2)
+
+
