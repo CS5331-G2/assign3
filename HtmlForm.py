@@ -14,7 +14,7 @@ class HtmlForm(HtmlElement):
 		form = parser.find("form")
 		if form is not None:
 			self.url = url
-			self.action = form['action'] if 'action' in form.attrs.keys() else "/"
+			self.action = form['action'] if 'action' in form.attrs.keys() else ""
 			self.method = form['method'] if 'method' in form.attrs.keys() else "GET"
 			self.method = self.method.upper()
 			self.inputs = []
