@@ -18,3 +18,15 @@ class Helper:
 		print "[{0} Forms] <- {1}".format(len(form_list), url)
 		return form_list
 
+	@staticmethod
+	def do_post_request(endpoint, dictHeaders, dictFormData):
+		import requests
+		return requests.post(endpoint.url, headers=dictHeaders, data=dictFormData)
+		
+
+	@staticmethod
+	def do_get_request(endpoint, dictHeaders, dictFormData):
+		import requests
+		return requests.get(endpoint.url, headers=dictHeaders, data=dictFormData)
+		
+
