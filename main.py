@@ -100,3 +100,8 @@ report = Helper.generate_attack_report();
 print json.dumps(report, default=AttackReport.serialize, indent=2)
 
 
+print "========================================================="
+print "Generating attack scripts"
+Helper.generate_attack_scripts();
+print "Done!"
+
