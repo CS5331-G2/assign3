@@ -50,7 +50,8 @@ class ShlCmdInjAttackModule(AttackModule):
 	]
 	unameStrings = [
 		"Linux student-CS5331-A2 3.13.0-32-generic",
-		"Linux xefro-ux 4.13.0-38-generic"
+		"Linux xefro-ux 4.13.0-38-generic",
+		"Linux ubuntu-xenial 4.4.0-116-generic"
 	]
 
 
