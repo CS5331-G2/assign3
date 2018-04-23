@@ -20,7 +20,9 @@ class HtmlForm(HtmlElement):
 			self.inputs = []
 			inputs = form.findAll("input")
 			for input_ in inputs:
-				self.inputs.append(HtmlInput(input_))
+				htmlInput = HtmlInput(input_)
+				if len(htmlInput.name) > 0:
+					self.inputs.append(HtmlInput(input_))
 		else:
 			"!!! Bad form tag\n{0}".format(htmlForm)
 
