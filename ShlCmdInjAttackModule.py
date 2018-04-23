@@ -86,13 +86,10 @@ class ShlCmdInjAttackModule(AttackModule):
 	
 	def launch_attack(self, endpoint, payload):
 		headers = {}
-		formData = {}
-		if endpoint.is_form():
-			formData = endpoint.get_form().get_form_data_dict()
-		elif endpoint.has_query_string():
-			formData = endpoint.get_query_string_dict()
+		formData = self.get_form_data(endpoint)
 		
 		for key in formData.keys():
+			formData = self.get_form_data(endpoint)
 			formData[key] = payload
 			res = None
 			if endpoint.method.upper() == "GET":
@@ -106,6 +103,14 @@ class ShlCmdInjAttackModule(AttackModule):
 				return True
 
 		return False
+
+	def get_form_data(self, endpoint):
+		formData = {}
+		if endpoint.is_form():
+			formData = endpoint.get_form().get_form_data_dict()
+		elif endpoint.has_query_string():
+			formData = endpoint.get_query_string_dict()
+		return formData
 
 	def is_attack_successful(self, res):
 		if res.ok:
