@@ -41,7 +41,7 @@ class Helper:
 	@staticmethod
 	def do_get_request(endpoint, dictHeaders, dictFormData):
 		import requests
-		return requests.get(endpoint.url, headers=dictHeaders, params=dictFormData)
+		return requests.get(endpoint.get_url_till_path(), headers=dictHeaders, params=dictFormData)
 
 	@staticmethod
 	def generate_attack_report():
@@ -79,7 +79,6 @@ class Helper:
 		import json
 		import os
 		import shutil
-		import urllib
 		from AttackReport import AttackReport
 
 		if os.path.isdir("generated_exploits"):
@@ -109,14 +108,8 @@ class Helper:
 					"dictFormData={0}".format(json.dumps(attackResult.formData)),
 				]
 				if attackResult.endpoint.method.upper() == "GET":
-					if len(attackResult.formData) > 0:
-						fileContent.append("url=\"{0}?{1}\"".format(
-							attackResult.endpoint.get_url_till_path(),
-							urllib.urlencode(attackResult.formData)))
-					else:
-						fileContent.append("url=\"{0}\"".format(attackResult.endpoint.get_url_till_path()))
-						
-					fileContent.append("r = requests.get(url, headers=dictHeaders, data=dictFormData)")
+					fileContent.append("url=\"{0}\"".format(attackResult.endpoint.get_url_till_path()))
+					fileContent.append("r = requests.get(url, headers=dictHeaders, params=dictFormData)")
 				elif attackResult.endpoint.method.upper() == "POST":
 					fileContent.append("url=\"{0}\"".format(attackResult.endpoint.url))
 					fileContent.append("r = requests.post(url, headers=dictHeaders, data=dictFormData)")
