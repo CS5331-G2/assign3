@@ -3,6 +3,7 @@ from Endpoint import Endpoint
 from AttackModule import AttackModule
 from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
+from CsrfAttackModule import CsrfAttackModule
 from AttackReport import AttackReport
 from Spider import Crawler
 from scrapy.crawler import CrawlerProcess
