@@ -1,10 +1,13 @@
 import json
 
 class AttackReport(object):
+	attackReportId = 1
 	attacks = []
 
 	@staticmethod
 	def add_attack_report(attackReport):
+		attackReport.id = AttackReport.attackReportId;
+		AttackReport.attackReportId += 1
 		AttackReport.attacks.append(attackReport)
 
 	@staticmethod
@@ -16,6 +19,7 @@ class AttackReport(object):
 		return results
 
 	def __init__(self, attackClass, endpoint, headers, formData, formId):
+		self.id = -1
 		self.attackClass = attackClass
 		self.endpoint = endpoint
 		self.headers = headers
@@ -39,6 +43,7 @@ class AttackReport(object):
 	def serialize(obj):
 		s = {}
 		s['class'] = obj.attackClass
+		s['id'] = obj.id
 		s['endpoint'] = obj.endpoint.url
 		s['method'] = obj.endpoint.method
 		s['params'] = obj.formData

@@ -7,6 +7,7 @@ from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
 from CookieSpider import Crawler
 from scrapy.crawler import CrawlerProcess
+from urlparse import urlparse
 
 import json
 
@@ -42,14 +43,18 @@ print ""
 print "========================================================="
 print "Revisiting endpoints for missed out href"
 tempURL =[]
+mainURLDomain = None
 foundURL = []
 for endpoint in endpoints:
+	if mainURLDomain is None:
+		mainURLDomain = urlparse(endpoint.url)[1]
 	tempURL.append(endpoint.url)
 	foundURL.extend(Helper.href_scraper(endpoint.url))
 # prevent adding duplicate in list
 seen = set(tempURL)
 for u in foundURL:
-	if u not in seen:
+	domain = urlparse(u)[1]
+	if u not in seen and domain == mainURLDomain:
 		seen.add(u)
 		endpoints.append(Endpoint(u, "GET"))
 		print "Added --> {0}".format(u)
@@ -114,3 +119,10 @@ print "Total number of attacks: {0}".format(len(AttackReport.attacks))
 #	print attack
 report = Helper.generate_attack_report();
 print json.dumps(report, default=AttackReport.serialize, indent=2)
+
+
+print "========================================================="
+print "Generating attack scripts"
+Helper.generate_attack_scripts();
+print "Done!"
+
