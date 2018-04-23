@@ -1,5 +1,6 @@
 from AttackModule import AttackModule
 from Helpers import Helper
+from AttackReport import AttackReport
 import requests
 
 class DirTravAttackModule(AttackModule):
@@ -43,6 +44,8 @@ class DirTravAttackModule(AttackModule):
 			res = Helper.do_get_request(endpoint, headers, formData)
 
 			if self.is_attack_successful(res):
+				report = AttackReport(self.attackClass, endpoint, headers, formData, "")
+				AttackReport.add_attack_report(report)
 				return True
 
 		return False
