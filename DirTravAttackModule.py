@@ -12,10 +12,10 @@ class DirTravAttackModule(AttackModule):
 		self.attack_succeeded = False
 		self.attack_report = None
 		if True not in (endpoint.is_form(), endpoint.has_query_string()):
-			print "Target is not a form or has a query string. Skipping."
+			print "    Target is not a form or has a query string. Skipping."
 			return
 
-		print "Beginning attack -> Directory Traversal Attack"
+		print "    Beginning attack -> Directory Traversal Attack"
 
 		f=open('DirTravPayload.txt','r')
 		for attackPattern in f.readlines():
@@ -23,13 +23,13 @@ class DirTravAttackModule(AttackModule):
 			result = self.launch_attack(endpoint, payload)
 			if result:
 				self.attack_succeeded = True
-				print "[DirectoryTraversal: {0}] -> {1}".format(payload, result)
+				print "    [DirectoryTraversal: {0}] -> {1}".format(payload, result)
 				break
 
 		if self.attack_succeeded:
-			print "Finished attack -> VULNERABLE\n"
+			print "    Finished attack -> VULNERABLE\n"
 		else:
-			print "Finished attack -> Nothing found!\n"
+			print "    Finished attack -> Nothing found!\n"
 
 	def launch_attack(self, endpoint, payload):
 		headers = {}
