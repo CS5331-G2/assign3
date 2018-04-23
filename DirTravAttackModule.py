@@ -1,7 +1,6 @@
 from AttackModule import AttackModule
 from Helpers import Helper
 from AttackReport import AttackReport
-import requests
 
 class DirTravAttackModule(AttackModule):
 	

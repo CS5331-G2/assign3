@@ -4,9 +4,11 @@ from AttackModule import AttackModule
 from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from CsrfAttackModule import CsrfAttackModule
+from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
 from Spider import Crawler
 from scrapy.crawler import CrawlerProcess
+from urlparse import urlparse
 
 import json
 
@@ -36,8 +38,26 @@ for url in crawledUrls:
 print "========================================================="
 print "Crawled {0} endpoints!".format(len(endpoints))
 print ""
+print "========================================================="
+print "Revisiting endpoints for missed out href"
+tempURL = []
+mainURLDomain = []
+foundURL = []
+for endpoint in endpoints:
+	if urlparse(endpoint.url)[1] not in mainURLDomain:
+		mainURLDomain.append(urlparse(endpoint.url)[1])
+	tempURL.append(endpoint.url)
+	foundURL.extend(Helper.href_scraper(endpoint.url))
+# prevent adding duplicate in list
+seen = set(tempURL)
+for u in foundURL:
+	domain = urlparse(u)[1]
+	if u not in seen and domain in mainURLDomain:
+		seen.add(u)
+		endpoints.append(Endpoint(u, "GET"))
+		print "Added --> {0}".format(u)
 
-
+print ""
 print "========================================================="
 print "Revisiting endpoints to check if forms are present"
 # We can then crawl all the endpoints to look for forms in each of them
@@ -48,8 +68,6 @@ for endpoint in endpoints:
 for form in forms:
 	endpoints.append(form.get_endpoint())
 
-
-
 print "========================================================="
 print "Selected attack modules:"
 # All attack modules inherit from the AttackModule class.
@@ -57,9 +75,10 @@ print "Selected attack modules:"
 # respective attacks.
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
-	#ShlCmdInjAttackModule(),
-	#DirTravAttackModule(),
-	CsrfAttackModule()
+	CsrfAttackModule(),
+	ShlCmdInjAttackModule(),
+	DirTravAttackModule(),
+	OpenRedirAttackModule()
 ]
 for module in attack_modules:
 	print module
@@ -101,4 +120,9 @@ print "Total number of attacks: {0}".format(len(AttackReport.attacks))
 report = Helper.generate_attack_report();
 print json.dumps(report, default=AttackReport.serialize, indent=2)
 
+
+print "========================================================="
+print "Generating attack scripts"
+Helper.generate_attack_scripts();
+print "Done!"
 
