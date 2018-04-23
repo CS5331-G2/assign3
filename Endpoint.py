@@ -19,11 +19,15 @@ class Endpoint(object):
 		self.method = method
 		self.isForm = False
 
-	def mark_as_form(self):
+	def mark_as_form(self, htmlForm):
 		self.isForm = True
+		self.htmlForm = htmlForm
 
 	def is_form(self):
 		return self.isForm
+
+	def get_form(self):
+		return self.htmlForm
 
 	def get_url_till_path(self):
 		return self.scheme + "://" + self.host + self.path
@@ -40,6 +44,17 @@ class Endpoint(object):
 			return self.path[self.path.index("?") + 1:]
 		else:
 			return "";
+
+	def get_query_string_dict(self):
+		query_string_dict = {}		
+		qs = self.get_query_string()
+		if qs.__len__() > 0:
+			keyValues = qs.split("&")
+			for keyValue in keyValues:
+				data = keyValue.split("=")
+				if len(data) == 2:
+					query_string_dict[data[0]] = data[1]
+		return query_string_dict
 
 	def __str__(self):
 		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\nFORM: {4}\n}}" \

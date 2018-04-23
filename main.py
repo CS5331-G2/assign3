@@ -78,6 +78,14 @@ for endpoint in endpoints:
 print ""
 
 
+print "========================================================="
+print "Trying to attack remaining endpoints"
+for endpoint in endpoints:
+	if True not in (endpoint.is_form(), endpoint.has_query_string()):
+		for module in attack_modules:
+			module.attack(endpoint)
+print ""
+
 
 #print "========================================================="
 #print "Visited endpoints {"
