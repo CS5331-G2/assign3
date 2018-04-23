@@ -5,7 +5,7 @@ from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
-from Spider import Crawler
+from CookieSpider import Crawler
 from scrapy.crawler import CrawlerProcess
 
 import json
@@ -28,6 +28,9 @@ process = CrawlerProcess({
 process.crawl(spider)
 process.start()
 crawledUrls = spider.getItems()
+
+print "Crawled URLS:"
+print crawledUrls
 
 endpoints = []
 for url in crawledUrls:
@@ -111,5 +114,3 @@ print "Total number of attacks: {0}".format(len(AttackReport.attacks))
 #	print attack
 report = Helper.generate_attack_report();
 print json.dumps(report, default=AttackReport.serialize, indent=2)
-
-
