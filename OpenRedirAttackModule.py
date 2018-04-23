@@ -43,10 +43,28 @@ class OpenRedirAttackModule(AttackModule):
 		return False
 
 	def is_attack_successful(self, res):
+		from bs4 import BeautifulSoup
 		if res.ok:
+			# HTTP 200
 			if res.status_code == 200:
+				# See if the page itself is the GitHub System Status page
 				if "GitHub System Status" in res.text:
 					return True
-			else:
-				return False
+
+				# Otherwise look for meta tags dealing with HTML redirect
+				bs = BeautifulSoup(res.text, "html.parser")
+				metaTags = bs.findAll("meta")
+				for meta in metaTags:
+					httpEquiv = meta['http-equiv'] if 'http-equiv' in meta.attrs.keys() else ""
+					content = meta['content'] if 'content' in meta.attrs.keys() else ""
+					if httpEquiv.lower() == "refresh" and len(content.split(";")) == 2:
+						if len(content.split(";")[1].split("=")) == 2:
+							if content.split(";")[1].split("=")[1] == "https://status.github.com/messages":
+								return True
+							
+			# Probably one of the HTTP Redirect Status codes
+			# Check for the 'Location' header
+			elif "Location" in res.headers.keys() and res.headers['Location'] == "https://status.github.com/messages":
+				return True
+
 		return False
