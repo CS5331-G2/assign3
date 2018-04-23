@@ -56,8 +56,9 @@ print "Selected attack modules:"
 # respective attacks.
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
-	ShlCmdInjAttackModule(),
-	DirTravAttackModule()
+	#ShlCmdInjAttackModule(),
+	#DirTravAttackModule(),
+	CsrfAttackModule()
 ]
 for module in attack_modules:
 	print module
