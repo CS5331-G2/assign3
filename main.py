@@ -43,6 +43,7 @@ print "Revisiting endpoints to check if forms are present"
 forms = []
 for endpoint in endpoints:
 	forms.extend(Helper.form_scrapper(endpoint.url))
+	Helper.href_scraper(endpoint.url)
 
 for form in forms:
 	endpoints.append(form.get_endpoint())

@@ -18,6 +18,18 @@ class Helper:
 		print "[{0} Forms] <- {1}".format(len(form_list), url)
 		return form_list
 
+	@staticmethod
+	def href_scraper(url):
+		import requests
+		from urlparse import urljoin
+		from bs4 import BeautifulSoup
+
+		soup = BeautifulSoup(requests.get(url, verify=False).text, "html.parser")
+
+		for a in soup.findAll('a', href=True):
+			print urljoin(url, a['href'])
+			print a['href']
+
 
 	@staticmethod
 	def do_post_request(endpoint, dictHeaders, dictFormData):
