@@ -18,13 +18,24 @@ class CsrfAttackModule(AttackModule):
 		self.attack_report = None
 
 		if "csrftoken" in endpoint.htmlForm.get_form_data_dict():
-			self, csrf_found = True
+			self.csrf_found = True
 			print
 			print "Inputs in form are:"
-			for index, formData in enumerate(endpoint.htmlForm.get_form_data_dict()):
-				print "[{0}] name:{1} value:{2}".format(index, formData, endpoint.htmlForm.get_form_data_dict()[formData])
+			for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
+				print "[{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
 			print
 			print "Beginning attack (CSRF Token in Form) -> CSRF\nTarget: {0}".format(endpoint.url)
+
+			payload = {}
+
+			for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
+				key_string = list(endpoint.htmlForm.get_form_data_dict().keys())[index]
+				if key_string == "csrftoken":
+					payload[key_string] = endpoint.htmlForm.get_form_data_dict()[key_string]
+				else:
+					payload[key_string] = endpoint.htmlForm.get_form_data_dict()[key_string] + "_changed"
+
+			self.attack_operation(endpoint, payload)
 
 		else:
 			client = requests.session()
@@ -36,16 +47,27 @@ class CsrfAttackModule(AttackModule):
 				print
 				print "Beginning attack (CSRF Token in Cookie) -> CSRF\nTarget: {0}".format(endpoint.url)
 
-				payload = {
-					'csrftoken': csrftoken,
-					'secret': '69'
-				}
+				payload = {}
 
-				r = client.post(endpoint.url, data=payload)
+				for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
+					key_string = list(endpoint.htmlForm.get_form_data_dict().keys())[index]
+					if key_string == "csrftoken":
+						payload[key_string] = endpoint.htmlForm.get_form_data_dict()[key_string]
+					else:
+						payload[key_string] = endpoint.htmlForm.get_form_data_dict()[key_string] + "_changed"
+
+				self.attack_operation(endpoint, payload)
 
 		if self.csrf_found is not True:
-			print "Target: {0}\n no CSRF Token found. Skipping!".format(endpoint.url)
+			print " no CSRF Token found. Skipping!".format(endpoint.url)
 			return
+
+	def attack_operation(self, endpoint, payload):
+		result = self.launch_attack(endpoint, payload)
+		if result:
+			self.attack_succeeded = True
+			print "    [ CsrfAttack: {0} ] ->".format(payload),
+			print result
 
 		if self.attack_succeeded:
 			print "    Finished attack -> VULNERABLE!\n"
@@ -54,20 +76,20 @@ class CsrfAttackModule(AttackModule):
 
 	def launch_attack(self, endpoint, payload):
 		headers = {}
-		endpoint.method.upper() == "POST"
 		res = Helper.do_post_request(endpoint, headers, payload)
 
-		if self.is_attack_successful(res):
+		if self.is_attack_successful(endpoint, res):
 			report = AttackReport(self.attackClass, endpoint, headers, payload, "")
 			AttackReport.add_attack_report(report)
 			return True
 
 		return False
 
-	def is_attack_successful(self, res):
+	def is_attack_successful(self, endpoint, res):
 		if res.ok:
 			if res.status_code == 200:
-				if any(match in res.text for match in CsrfAttackModule.unameStrings):
+				req = requests.get(endpoint.url)
+				if "_changed" in req.text:
 					return True
 			else:
 				print "WARNING: CsrfAttackModule, " + \
