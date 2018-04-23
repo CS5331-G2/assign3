@@ -74,13 +74,61 @@ class Helper:
 
 		return report
 
+	@staticmethod
+	def generate_attack_scripts():
+		import json
+		import os
+		import shutil
+		import urllib
+		from AttackReport import AttackReport
 
+		if os.path.isdir("generated_exploits"):
+			shutil.rmtree("generated_exploits")
 
+		os.makedirs("generated_exploits");
 
+		attackClasses = [
+			"Command Injection",
+			"SQL Injection",
+			"Server Side Code Injection",
+			"Directory Traversal",
+			"Open Redirect",
+			"CSRF",
+		]
 
+		for attackClass in attackClasses:
+			attackResults = AttackReport.get_attack_report_by_class(attackClass)
+			for attackResult in attackResults:
+				fileContent = [
+					"# Host: {0}".format(attackResult.endpoint.get_scheme_and_host_url()),
+					"# Endpoint: {0}".format(attackResult.endpoint.get_path_and_query_string()),
+					"# Params: {0}".format(json.dumps(attackResult.formData)),
+					"# Method: {0}".format(json.dumps(attackResult.endpoint.method)),
+					"import requests",
+					"dictHeaders={0}".format(json.dumps(attackResult.headers)),
+					"dictFormData={0}".format(json.dumps(attackResult.formData)),
+				]
+				if attackResult.endpoint.method.upper() == "GET":
+					if len(attackResult.formData) > 0:
+						fileContent.append("url=\"{0}?{1}\"".format(
+							attackResult.endpoint.get_url_till_path(),
+							urllib.urlencode(attackResult.formData)))
+					else:
+						fileContent.append("url=\"{0}\"".format(attackResult.endpoint.get_url_till_path()))
+						
+					fileContent.append("r = requests.get(url, headers=dictHeaders, data=dictFormData)")
+				elif attackResult.endpoint.method.upper() == "POST":
+					fileContent.append("url=\"{0}\"".format(attackResult.endpoint.url))
+					fileContent.append("r = requests.post(url, headers=dictHeaders, data=dictFormData)")
+				fileContent.append("print r.text")
 
-
-
+				directory = attackClass.lower().replace(" ", "-")
+				path = "generated_exploits/{0}.py".format(str(attackResult.id))
+				print "Generated: {0}".format(path)
+				with open(path, "w") as outputFile:
+					for line in fileContent:
+						outputFile.write(line + "\n")
+					outputFile.close()
 
 
 
