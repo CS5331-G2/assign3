@@ -39,22 +39,23 @@ print "Crawled {0} endpoints!".format(len(endpoints))
 print ""
 print "========================================================="
 print "Revisiting endpoints for missed out href"
-tempURL =[]
-mainURLDomain = None
+tempURL = []
+mainURLDomain = []
 foundURL = []
 for endpoint in endpoints:
-	if mainURLDomain is None:
-		mainURLDomain = urlparse(endpoint.url)[1]
+	if urlparse(endpoint.url)[1] not in mainURLDomain:
+		mainURLDomain.append(urlparse(endpoint.url)[1])
 	tempURL.append(endpoint.url)
 	foundURL.extend(Helper.href_scraper(endpoint.url))
 # prevent adding duplicate in list
 seen = set(tempURL)
 for u in foundURL:
 	domain = urlparse(u)[1]
-	if u not in seen and domain == mainURLDomain:
+	if u not in seen and domain in mainURLDomain:
 		seen.add(u)
 		endpoints.append(Endpoint(u, "GET"))
 		print "Added --> {0}".format(u)
+
 print ""
 print "========================================================="
 print "Revisiting endpoints to check if forms are present"
