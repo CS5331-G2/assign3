@@ -13,8 +13,8 @@ class Endpoint(object):
 		self.host = parser.hostname
 		if parser.port is not None:
 			self.host = self.host + ":" + str(parser.port)
-		self.path = parser.path if parser.path.__len__() > 0 else "/"
-		if parser.query.__len__() > 0 :
+		self.path = parser.path if len(parser.path) > 0 else "/"
+		if len(parser.query) > 0 :
 			self.path = parser.path + "?" + parser.query
 		self.method = method
 		self.isForm = False
@@ -54,7 +54,7 @@ class Endpoint(object):
 	def get_query_string_dict(self):
 		query_string_dict = {}		
 		qs = self.get_query_string()
-		if qs.__len__() > 0:
+		if len(qs) > 0:
 			keyValues = qs.split("&")
 			for keyValue in keyValues:
 				data = keyValue.split("=")
