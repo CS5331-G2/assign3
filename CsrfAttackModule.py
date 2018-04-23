@@ -1,3 +1,4 @@
+import requests
 from AttackModule import AttackModule
 
 class CsrfAttackModule(AttackModule):
@@ -11,8 +12,23 @@ class CsrfAttackModule(AttackModule):
 			return
 
 		if "csrftoken" in endpoint.htmlForm.get_form_data_dict():
-			print "Beginning attack -> CSRF\nTarget: {0}".format(endpoint.url)
+			print
+			print "Beginning attack (CSRF Token in Form) -> CSRF\nTarget: {0}".format(endpoint.url)
 			print "Inputs in form are:"
 
-			for formData in endpoint.htmlForm.get_form_data_dict():
-				print "name:{0} value:{1}".format(formData, endpoint.htmlForm.get_form_data_dict()[formData])
+			for index, formData in enumerate(endpoint.htmlForm.get_form_data_dict()):
+				print "[{0}] name:{1} value:{2}".format(index, formData, endpoint.htmlForm.get_form_data_dict()[formData])
+
+		client = requests.session()
+		client.get(endpoint.url)
+		if 'csrftoken' in client.cookies:
+			csrftoken = client.cookies['csrftoken']
+			print
+			print "Beginning attack (CSRF Token in Cookie) -> CSRF\nTarget: {0}".format(endpoint.url)
+
+			payload = {
+				'csrftoken': csrftoken,
+				'tag': '69'
+			}
+
+			r = client.post(endpoint.url, data=payload)
