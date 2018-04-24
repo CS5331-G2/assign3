@@ -64,6 +64,20 @@ for u in foundURL:
 
 print ""
 print "========================================================="
+print "Revisiting endpoints to check if scripts are present"
+# We can then crawl all the endpoints to look for forms in each of them
+forms = []
+for endpoint in endpoints:
+	newUrls = Helper.script_location_scrapper(endpoint.url)
+	for newUrl in newUrls:
+		print "Added --> {0}".format(newUrl)
+		endpoints.append(newUrl)
+
+for form in forms:
+	endpoints.append(form.get_endpoint())
+
+print ""
+print "========================================================="
 print "Revisiting endpoints to check if forms are present"
 # We can then crawl all the endpoints to look for forms in each of them
 forms = []

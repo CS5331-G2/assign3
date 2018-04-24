@@ -18,6 +18,28 @@ class Helper:
 		print "[{0} Forms] <- {1}".format(len(form_list), url)
 		return form_list
 
+	def script_location_scrapper(url):
+		import requests
+		import re
+		from bs4 import BeautifulSoup
+		url = "http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080/random.php"
+		parser = BeautifulSoup(requests.get(url, verify=False).text, "html.parser")
+		scripts = parser.findAll("script")
+		index = 0
+		possible_urls = []
+		possible_url_sigs = [
+		]
+		for script in scripts:
+			matches = re.findall('document\.location = document\.location\.href \+ "(.*?)";', str(script))
+			for match in matches:
+				possible_urls.append(match)
+
+		result = []
+		for possible_url in possible_urls:
+			result.append(url + possible_url)
+
+		return result
+
 	@staticmethod
 	def href_scraper(url):
 		import requests
