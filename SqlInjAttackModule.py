@@ -8,9 +8,10 @@ class SqlInjAttackModule(AttackModule):
 		AttackModule.__init__(self, "SQL Injection", "SQL Injection")
 
 	def attack(self, endpoint):
-		print "Beginning attack -> SqlInj"
+		print "    Beginning attack -> SQL Injection"
 		if endpoint.is_form() is not True:
-			print "Target: {0}\t is not a form. Skipping!".format(endpoint.url)
+			print "    Target: {0}\n    Is not a form. Skipping!".format(endpoint.url)
+			print "    Finished attack -> Nothing found!\n"
 			return
 
 		self.attack_succeeded = False
@@ -19,7 +20,7 @@ class SqlInjAttackModule(AttackModule):
 		print "    Inputs in form are:"
 		for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
 			print "    [{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
-		print "Beginning attack (SQL Injection) -> SQL\n Target: {0}".format(endpoint.url)
+		print "    Beginning attack (SQL Injection) -> SQL\n    Target: {0}".format(endpoint.url)
 
 		f = open('SqlInjPayload.txt', 'r')
 		for params, attackPattern in enumerate(f.readlines()):
@@ -28,7 +29,7 @@ class SqlInjAttackModule(AttackModule):
 				key_string = list(endpoint.htmlForm.get_form_data_dict().keys())[index]
 				payload[key_string] = attackPattern.strip()
 
-			result = self.launch_attack(endpoint, payload)
+			result = self.launch_attack(endpoint, payload, attackPattern.strip())
 			if result:
 				self.attack_succeeded = True
 				print "    [ SqlInjAttack: {0} params in table ] ->".format(params)
@@ -40,21 +41,25 @@ class SqlInjAttackModule(AttackModule):
 		else:
 			print "    Finished attack -> Nothing found!\n"
 
-	def launch_attack(self, endpoint, payload):
+	def launch_attack(self, endpoint, payload, attackPattern):
 		headers = {}
-		res = Helper.do_post_request(endpoint, headers, payload)
+		res = None
+		if endpoint.method.upper() == "GET":
+			res = Helper.do_get_request(endpoint, headers, payload)
+		elif endpoint.method.upper() == "POST":
+			res = Helper.do_post_request(endpoint, headers, payload)
 
-		if self.is_attack_successful(res):
+		if res is not None and self.is_attack_successful(res, attackPattern):
 			report = AttackReport(self.attackClass, endpoint, headers, payload, "")
 			AttackReport.add_attack_report(report)
 			return True
 
 		return False
 
-	def is_attack_successful(self, res):
+	def is_attack_successful(self, res, attackPattern):
 		if res.ok:
 			if res.status_code == 200:
-				if "q1w2e3r4t5y6u7i8o9" in res.content:
+				if "q1w2e3r4t5y6u7i8o9" in res.content and attackPattern not in res.content:
 					return True
 			else:
 				print "WARNING: SqlInjAttackModule, " + \
