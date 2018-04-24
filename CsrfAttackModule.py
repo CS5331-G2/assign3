@@ -12,6 +12,7 @@ class CsrfAttackModule(AttackModule):
 		print "    Beginning attack -> CSRF"
 		if endpoint.is_form() is not True:
 			print "    Target: {0}\n    Is not a form. Skipping!".format(endpoint.url)
+			print "    Finished attack -> Nothing found!\n"
 			return
 
 		self.csrf_found = False
