@@ -10,7 +10,7 @@ class CsrfAttackModule(AttackModule):
 
 	def attack(self, endpoint):
 		if endpoint.is_form() is not True:
-			print "Target: {0}\n is not a form. Skipping!".format(endpoint.url)
+			print "Target: {0}\t is not a form. Skipping!".format(endpoint.url)
 			return
 
 		self.csrf_found = False
@@ -19,12 +19,10 @@ class CsrfAttackModule(AttackModule):
 
 		if "csrftoken" in endpoint.htmlForm.get_form_data_dict():
 			self.csrf_found = True
-			print
-			print "Inputs in form are:"
+			print "    Inputs in form are:"
 			for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
-				print "[{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
-			print
-			print "Beginning attack (CSRF Token in Form) -> CSRF\nTarget: {0}".format(endpoint.url)
+				print "    [{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
+			print "Beginning attack (CSRF Token in Form) -> CSRF\n Target: {0}".format(endpoint.url)
 
 			payload = {}
 
