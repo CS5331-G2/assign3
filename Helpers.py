@@ -23,25 +23,22 @@ class Helper:
 		import requests
 		import re
 		from bs4 import BeautifulSoup
-
-		parser = BeautifulSoup(requests.get(url, verify=False).text, "html.parser")
+		from Endpoint import Endpoint
+		endpoint = Endpoint(url, "GET")
+		parser = BeautifulSoup(requests.get(endpoint.url, verify=False).text, "html.parser")
 		scripts = parser.findAll("script")
 
-		possible_urls = []
+		result = []
 		for script in scripts:
 			if len(re.findall('document\.location = document\.location\.href \+ "(.*?)";', str(script))) > 0:
 				matches = re.findall('document\.location = document\.location\.href \+ "(.*?)";', str(script))
 				for match in matches:
-					possible_urls.append(match)
+					result.append(endpoint.url + match)
 			if len(re.findall('"<pre>" \+ document\.location\.origin \+ "\/princess\.php\?target=" \+ document\.location\.href \+ "<\/pre><\/p>";', str(script))) > 0:
 				matches = re.findall('"<pre>" \+ document\.location\.origin \+ "\/princess\.php\?target=" \+ document\.location\.href \+ "<\/pre><\/p>";', str(script))
 				for match in matches:
-					possible_urls.append("princess.php?target=" + url)
+					result.append(endpoint.get_scheme_and_host_url() + "/princess.php?target=" + url)
 	
-		result = []
-		for possible_url in possible_urls:
-			result.append(url + possible_url)
-
 		return result
 
 
@@ -70,6 +67,9 @@ class Helper:
 	def do_get_request(endpoint, dictHeaders, dictFormData):
 		import requests
 		# WARNING: SSL Verification has been intentionally disabled!
+		print endpoint.get_url_till_path()
+		print dictHeaders
+		print dictFormData
 		return requests.get(endpoint.get_url_till_path(), verify=False, headers=dictHeaders, params=dictFormData)
 
 	@staticmethod

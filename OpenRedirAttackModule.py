@@ -1,6 +1,8 @@
 from AttackModule import AttackModule
 from Helpers import Helper
 from AttackReport import AttackReport
+from bs4 import BeautifulSoup
+import re
 
 class OpenRedirAttackModule(AttackModule):
 	
@@ -34,6 +36,7 @@ class OpenRedirAttackModule(AttackModule):
 			formData[key] = payload
 			res = None
 			res = Helper.do_get_request(endpoint, headers, formData)
+			print res.url
 
 
 			if self.is_attack_successful(res):
@@ -44,7 +47,6 @@ class OpenRedirAttackModule(AttackModule):
 		return False
 
 	def is_attack_successful(self, res):
-		from bs4 import BeautifulSoup
 		if res.ok:
 			# HTTP 200
 			if res.status_code == 200:
