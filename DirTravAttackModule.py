@@ -9,10 +9,12 @@ class DirTravAttackModule(AttackModule):
 
 
 	def attack(self, endpoint):
+		print "    Beginning attack -> Directory Traversal"
 		self.attack_succeeded = False
 		self.attack_report = None
 		if True not in (endpoint.is_form(), endpoint.has_query_string()):
 			print "    Target is not a form or has a query string. Skipping."
+			print "    Finished attack -> Nothing found!\n"
 			return
 
 		print "    Beginning attack -> Directory Traversal Attack"
