@@ -24,7 +24,7 @@ class CsrfAttackModule(AttackModule):
 			print "    Inputs in form are:"
 			for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
 				print "      [{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
-			print "    Beginning attack (CSRF Token in Form) -> CSRF\n Target: {0}".format(endpoint.url)
+			print "    Beginning attack (CSRF Token in Form) -> CSRF\n    Target: {0}".format(endpoint.url)
 
 			payload = {}
 
@@ -45,7 +45,7 @@ class CsrfAttackModule(AttackModule):
 				csrftoken = client.cookies['csrftoken']
 				print "      name:csrftoken value:(0)".format(csrftoken)
 				print
-				print "    Beginning attack (CSRF Token in Cookie) -> CSRF\nTarget: {0}".format(endpoint.url)
+				print "    Beginning attack (CSRF Token in Cookie) -> CSRF\n    Target: {0}".format(endpoint.url)
 
 				payload = {}
 
