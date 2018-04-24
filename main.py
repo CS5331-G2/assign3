@@ -6,7 +6,7 @@ from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from CsrfAttackModule import CsrfAttackModule
 from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
-from Spider import Crawler
+from CookieSpider import Crawler
 from scrapy.crawler import CrawlerProcess
 from urlparse import urlparse
 
@@ -30,6 +30,9 @@ process = CrawlerProcess({
 process.crawl(spider)
 process.start()
 crawledUrls = spider.getItems()
+
+print "Crawled URLS:"
+print crawledUrls
 
 endpoints = []
 for url in crawledUrls:
