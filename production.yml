@@ -9,6 +9,7 @@
     setup_git_repo: yes  # set to no for local development and map your local git repo in the Vagrantfile instead
     setup_local_repo: no
     update_apt_cache: yes
+    ansible_ssh_private_key_file: "/home/development"
   vars_files:
     - env_vars/base.yml
     - env_vars/production.yml
