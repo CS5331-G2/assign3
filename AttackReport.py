@@ -47,6 +47,7 @@ class AttackReport(object):
 		s['endpoint'] = obj.endpoint.url
 		s['method'] = obj.endpoint.method
 		s['params'] = obj.formData
+		s['headers'] = obj.headers
 		if obj.attackClass == "CSRF":
 			#some other form of parsing needed?
 			s['form_id'] = obj.formId
