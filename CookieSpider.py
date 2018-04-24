@@ -8,7 +8,7 @@ url = []
 class Crawler(CrawlSpider):
 	name = "Crawler"
 	allowed_domains = ['ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com']
-	start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080']
+	start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8081/']
 	# start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080/', 
 	# 'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8081',
 	# 'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8083/']
@@ -19,12 +19,12 @@ class Crawler(CrawlSpider):
 
 	def request(self, url, callback):
 		request = scrapy.Request(url=url, callback='callback')
-		request.cookies['PHPSESSID'] = 'ajvduujvnkdafvaalt6mlfsiv6'
+		request.cookies['PHPSESSID'] = 'j33vlk426pm9qmf339f2rl3jq0'
 		return request
 
 	def start_requests(self):
 		for i, url in enumerate(self.start_urls):
-			yield Request(url, callback=self.parse_item)
+			yield Request(url,cookies={'PHPSESSID':'j33vlk426pm9qmf339f2rl3jq0'} ,callback=self.parse_item)
 
 	def parse_item(self, response):
 		# Extract All links in the particular response page
