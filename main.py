@@ -3,6 +3,7 @@ from Endpoint import Endpoint
 from AttackModule import AttackModule
 from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
+from CsrfAttackModule import CsrfAttackModule
 from OpenRedirAttackModule import OpenRedirAttackModule
 from AttackReport import AttackReport
 from Spider import Crawler
@@ -74,6 +75,7 @@ print "Selected attack modules:"
 # respective attacks.
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
+	CsrfAttackModule(),
 	ShlCmdInjAttackModule(),
 	DirTravAttackModule(),
 	OpenRedirAttackModule()
