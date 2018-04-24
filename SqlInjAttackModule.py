@@ -32,7 +32,7 @@ class SqlInjAttackModule(AttackModule):
 			result = self.launch_attack(endpoint, payload, attackPattern.strip())
 			if result:
 				self.attack_succeeded = True
-				print "    [ SqlInjAttack: {0} params in table ] ->".format(params)
+				print "    [ SqlInjAttack: {0} params in table ] ->".format(params + 1)
 				print "    [ SqlInjAttack: {0} ] ->".format(payload)
 				break
 
