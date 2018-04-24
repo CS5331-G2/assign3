@@ -28,7 +28,7 @@
 - name: Git clone our awesome scanner
   git:
     repo: 'https://github.com/CS5331-G2/assign3.git'
-    dest: /home/vagrant/assign3
+    dest: /home/ubuntu/assign3
     version: master
   when: setup_git_repo is defined and setup_git_repo
 

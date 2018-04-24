@@ -8,9 +8,10 @@ url = []
 class Crawler(CrawlSpider):
 	name = "Crawler"
 	allowed_domains = ['ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com']
-	start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080/', 
-	'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8081',
-	'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8083/']
+	start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080']
+	# start_urls = ['http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8080/', 
+	# 'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8081',
+	# 'http://ec2-54-251-169-51.ap-southeast-1.compute.amazonaws.com:8083/']
 
 	rules = (
 		Rule(LinkExtractor(), callback='parse_item', follow=True),
@@ -18,7 +19,7 @@ class Crawler(CrawlSpider):
 
 	def request(self, url, callback):
 		request = scrapy.Request(url=url, callback='callback')
-		request.cookies['cookie'] = 1
+		request.cookies['PHPSESSID'] = 'ajvduujvnkdafvaalt6mlfsiv6'
 		return request
 
 	def start_requests(self):
