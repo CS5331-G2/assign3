@@ -28,8 +28,7 @@ class SqlInjAttackModule(AttackModule):
 				key_string = list(endpoint.htmlForm.get_form_data_dict().keys())[index]
 				payload[key_string] = attackPattern.strip()
 
-			print "    [ SqlInjAttack: {0} ] ->".format(payload)
-			result = self.launch_attack(endpoint, payload)
+			result = self.launch_attack(endpoint, payload, attackPattern.strip())
 			if result:
 				self.attack_succeeded = True
 				print "    [ SqlInjAttack: {0} params in table ] ->".format(params)
@@ -41,7 +40,7 @@ class SqlInjAttackModule(AttackModule):
 		else:
 			print "    Finished attack -> Nothing found!\n"
 
-	def launch_attack(self, endpoint, payload):
+	def launch_attack(self, endpoint, payload, attackPattern):
 		headers = {}
 		res = None
 		if endpoint.method.upper() == "GET":
@@ -49,17 +48,17 @@ class SqlInjAttackModule(AttackModule):
 		elif endpoint.method.upper() == "POST":
 			res = Helper.do_post_request(endpoint, headers, payload)
 
-		if res is not None and self.is_attack_successful(res, payload):
+		if res is not None and self.is_attack_successful(res, attackPattern):
 			report = AttackReport(self.attackClass, endpoint, headers, payload, "")
 			AttackReport.add_attack_report(report)
 			return True
 
 		return False
 
-	def is_attack_successful(self, res, payload):
+	def is_attack_successful(self, res, attackPattern):
 		if res.ok:
 			if res.status_code == 200:
-				if "q1w2e3r4t5y6u7i8o9" in res.content and payload not in res.content:
+				if "q1w2e3r4t5y6u7i8o9" in res.content and attackPattern not in res.content:
 					return True
 			else:
 				print "WARNING: SqlInjAttackModule, " + \
