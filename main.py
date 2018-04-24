@@ -70,8 +70,11 @@ forms = []
 for endpoint in endpoints:
 	newUrls = Helper.script_location_scrapper(endpoint.url)
 	for newUrl in newUrls:
-		print "Added --> {0}".format(newUrl)
-		endpoints.append(newUrl)
+		domain = urlparse(newUrl)[1]
+		if newUrl not in seen and domain in mainURLDomain:
+			seen.add(newUrl)
+			print "Added --> {0}".format(newUrl)
+			endpoints.append(Endpoint(newUrl, "GET"))
 
 for form in forms:
 	endpoints.append(form.get_endpoint())

@@ -17,7 +17,8 @@ class Helper:
 		
 		print "[{0} Forms] <- {1}".format(len(form_list), url)
 		return form_list
-
+	
+	@staticmethod
 	def script_location_scrapper(url):
 		import requests
 		import re
