@@ -33,6 +33,10 @@ class Helper:
 				matches = re.findall('document\.location = document\.location\.href \+ "(.*?)";', str(script))
 				for match in matches:
 					possible_urls.append(match)
+			if len(re.findall('"<pre>" \+ document\.location\.origin \+ "\/princess\.php\?target=" \+ document\.location\.href \+ "<\/pre><\/p>";', str(script))) > 0:
+				matches = re.findall('"<pre>" \+ document\.location\.origin \+ "\/princess\.php\?target=" \+ document\.location\.href \+ "<\/pre><\/p>";', str(script))
+				for match in matches:
+					possible_urls.append("/princess.php?target=" + url)
 	
 		result = []
 		for possible_url in possible_urls:
