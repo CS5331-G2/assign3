@@ -77,7 +77,11 @@ class CsrfAttackModule(AttackModule):
 
 	def launch_attack(self, endpoint, payload):
 		headers = {}
-		res = Helper.do_post_request(endpoint, headers, payload)
+		res = None
+		if endpoint.method.upper() == "GET":
+			res = Helper.do_get_request(endpoint, headers, payload)
+		elif endpoint.method.upper() == "POST":
+			res = Helper.do_post_request(endpoint, headers, payload)
 
 		if self.is_attack_successful(endpoint, res):
 			report = AttackReport(self.attackClass, endpoint, headers, payload, "")
