@@ -6,6 +6,7 @@ from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from CsrfAttackModule import CsrfAttackModule
 from OpenRedirAttackModule import OpenRedirAttackModule
 from PhpCodeInjAttackModule import PhpCodeInjAttackModule
+from SqlInjAttackModule import SqlInjAttackModule
 from AttackReport import AttackReport
 from CookieSpider import Crawler
 from scrapy.crawler import CrawlerProcess
@@ -79,6 +80,7 @@ print "Selected attack modules:"
 # respective attacks.
 attack_modules = [
 	#LfiAttackModule(), # add modules as you implement them here
+	SqlInjAttackModule(),
 	CsrfAttackModule(),
 	ShlCmdInjAttackModule(),
 	DirTravAttackModule(),
