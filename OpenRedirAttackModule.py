@@ -62,6 +62,15 @@ class OpenRedirAttackModule(AttackModule):
 						if len(content.split(";")[1].split("=")) == 2:
 							if content.split(";")[1].split("=")[1] == "https://status.github.com/messages":
 								return True
+
+				# Otherwise look for <script>
+				scriptTags = bs.findAll("script")
+				for script in scripts:
+					if len(re.findall('document\.location = "(.*?)";', str(script))) > 0:
+						matches = re.findall('document\.location = "(.*?)";', str(script))
+						for match in matches:
+							if match == "https://status.github.com/messages":
+								return True
 							
 			# Probably one of the HTTP Redirect Status codes
 			# Check for the 'Location' header
