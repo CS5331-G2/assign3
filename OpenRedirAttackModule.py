@@ -8,6 +8,7 @@ class OpenRedirAttackModule(AttackModule):
 		AttackModule.__init__(self, "Open Redirect", "Open Redirect")
 
 	def attack(self, endpoint):
+		print "    Beginning attack -> Open Redirection"
 		self.attack_succeeded = False
 		self.attack_report = None
 
