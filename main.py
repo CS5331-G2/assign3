@@ -5,6 +5,7 @@ from DirTravAttackModule import DirTravAttackModule
 from ShlCmdInjAttackModule import ShlCmdInjAttackModule
 from CsrfAttackModule import CsrfAttackModule
 from OpenRedirAttackModule import OpenRedirAttackModule
+from PhpCodeInjAttackModule import PhpCodeInjAttackModule
 from AttackReport import AttackReport
 from CookieSpider import Crawler
 from scrapy.crawler import CrawlerProcess
@@ -81,7 +82,8 @@ attack_modules = [
 	CsrfAttackModule(),
 	ShlCmdInjAttackModule(),
 	DirTravAttackModule(),
-	OpenRedirAttackModule()
+	OpenRedirAttackModule(),
+	PhpCodeInjAttackModule()
 ]
 for module in attack_modules:
 	print module
@@ -91,8 +93,8 @@ print "========================================================="
 print "Trying to attack endpoints with forms"
 for endpoint in endpoints:
 	if endpoint.is_form():
+		print "Target: {0}".format(endpoint.url)
 		for module in attack_modules:
-			print "Target: {0}".format(endpoint.url)
 			module.attack(endpoint)
 print ""
 
@@ -100,8 +102,8 @@ print "========================================================="
 print "Trying to attack endpoints with query strings"
 for endpoint in endpoints:
 	if endpoint.has_query_string():
+		print "Target: {0}".format(endpoint.url)
 		for module in attack_modules:
-			print "Target: {0}".format(endpoint.url)
 			module.attack(endpoint)
 print ""
 
@@ -110,8 +112,8 @@ print "========================================================="
 print "Trying to attack remaining endpoints"
 for endpoint in endpoints:
 	if True not in (endpoint.is_form(), endpoint.has_query_string()):
+		print "Target: {0}".format(endpoint.url)
 		for module in attack_modules:
-			print "Target: {0}".format(endpoint.url)
 			module.attack(endpoint)
 print ""
 

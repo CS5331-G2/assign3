@@ -35,13 +35,15 @@ class Helper:
 	@staticmethod
 	def do_post_request(endpoint, dictHeaders, dictFormData):
 		import requests
-		return requests.post(endpoint.url, headers=dictHeaders, data=dictFormData)
+		# WARNING: SSL Verification has been intentionally disabled!
+		return requests.post(endpoint.url, verify=False, headers=dictHeaders, data=dictFormData)
 		
 
 	@staticmethod
 	def do_get_request(endpoint, dictHeaders, dictFormData):
 		import requests
-		return requests.get(endpoint.get_url_till_path(), headers=dictHeaders, params=dictFormData)
+		# WARNING: SSL Verification has been intentionally disabled!
+		return requests.get(endpoint.get_url_till_path(), verify=False, headers=dictHeaders, params=dictFormData)
 
 	@staticmethod
 	def generate_attack_report():
@@ -101,18 +103,21 @@ class Helper:
 				fileContent = [
 					"# Host: {0}".format(attackResult.endpoint.get_scheme_and_host_url()),
 					"# Endpoint: {0}".format(attackResult.endpoint.get_path_and_query_string()),
+					"# Headers: {0}".format(json.dumps(attackResult.headers)),
 					"# Params: {0}".format(json.dumps(attackResult.formData)),
 					"# Method: {0}".format(json.dumps(attackResult.endpoint.method)),
 					"import requests",
 					"dictHeaders={0}".format(json.dumps(attackResult.headers)),
 					"dictFormData={0}".format(json.dumps(attackResult.formData)),
+					"",
+					"# WARNING: SSL Verification has been intentionally disabled!"
 				]
 				if attackResult.endpoint.method.upper() == "GET":
 					fileContent.append("url=\"{0}\"".format(attackResult.endpoint.get_url_till_path()))
-					fileContent.append("r = requests.get(url, headers=dictHeaders, params=dictFormData)")
+					fileContent.append("r = requests.get(url, verify=False, headers=dictHeaders, params=dictFormData)")
 				elif attackResult.endpoint.method.upper() == "POST":
 					fileContent.append("url=\"{0}\"".format(attackResult.endpoint.url))
-					fileContent.append("r = requests.post(url, headers=dictHeaders, data=dictFormData)")
+					fileContent.append("r = requests.post(url, verify=False, headers=dictHeaders, data=dictFormData)")
 				fileContent.append("print r.text")
 
 				directory = attackClass.lower().replace(" ", "-")
