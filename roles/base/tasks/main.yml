@@ -25,6 +25,13 @@
     - bs4
     - requests
 
+- name: Git clone our awesome scanner
+  git:
+    repo: 'https://github.com/CS5331-G2/assign3.git'
+    dest: /home/vagrant
+  when:
+    - clone_git
+
 - name: Copy html.zip to /home/vagrant
   copy:
     src: /Users/macos/Dropbox (Personal)/1. NUS/SourceCode/CS5331/assign3/html.zip

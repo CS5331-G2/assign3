@@ -11,6 +11,7 @@
     update_apt_cache: yes
   vars_files:
     - env_vars/base.yml
+    - env_vars/development.yml
 
   roles:
     - base
