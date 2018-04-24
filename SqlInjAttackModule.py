@@ -8,7 +8,7 @@ class SqlInjAttackModule(AttackModule):
 		AttackModule.__init__(self, "SQL Injection", "SQL Injection")
 
 	def attack(self, endpoint):
-		print "Beginning attack -> SqlInj"
+		print "    Beginning attack -> SqlInj"
 		if endpoint.is_form() is not True:
 			print "    Target: {0}\n    Is not a form. Skipping!".format(endpoint.url)
 			return
