@@ -8,6 +8,7 @@ class SqlInjAttackModule(AttackModule):
 		AttackModule.__init__(self, "SQL Injection", "SQL Injection")
 
 	def attack(self, endpoint):
+		print "Beginning attack -> SqlInj"
 		if endpoint.is_form() is not True:
 			print "Target: {0}\t is not a form. Skipping!".format(endpoint.url)
 			return
@@ -20,7 +21,7 @@ class SqlInjAttackModule(AttackModule):
 			print "    [{0}] name:{1} value:{2}".format(index, key, endpoint.htmlForm.get_form_data_dict()[key])
 		print "Beginning attack (SQL Injection) -> SQL\n Target: {0}".format(endpoint.url)
 
-		f=open('SqlInjPayload.txt', 'r')
+		f = open('SqlInjPayload.txt', 'r')
 		for params, attackPattern in enumerate(f.readlines()):
 			payload = {}
 			for index, key in enumerate(endpoint.htmlForm.get_form_data_dict()):
@@ -34,10 +35,10 @@ class SqlInjAttackModule(AttackModule):
 				print "    [ SqlInjAttack: {0} ] ->".format(payload)
 				break
 
-			if self.attack_succeeded:
-				print "    Finished attack -> VULNERABLE!\n"
-			else:
-				print "    Finished attack -> Nothing found!\n"
+		if self.attack_succeeded:
+			print "    Finished attack -> VULNERABLE!\n"
+		else:
+			print "    Finished attack -> Nothing found!\n"
 
 	def launch_attack(self, endpoint, payload):
 		headers = {}
