@@ -1,4 +1,3 @@
-import requests
 from AttackModule import AttackModule
 from Helpers import Helper
 from AttackReport import AttackReport
@@ -58,8 +57,7 @@ class SqlInjAttackModule(AttackModule):
 	def is_attack_successful(self, endpoint, res):
 		if res.ok:
 			if res.status_code == 200:
-				req = requests.get(endpoint.url)
-				print req.text
+				print res.content
 				return True
 			else:
 				print "WARNING: SqlInjAttackModule, " + \
