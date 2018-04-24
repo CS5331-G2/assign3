@@ -68,6 +68,14 @@ class Endpoint(object):
 	def get_path_and_query_string(self):
 		return self.path
 
+	def get_form_data(self):
+		formData = {}
+		if self.is_form():
+			formData = self.get_form().get_form_data_dict()
+		elif self.has_query_string():
+			formData = self.get_query_string_dict()
+		return formData
+
 	def __str__(self):
 		return "Endpoint {{\nURL: {0}\n{1} {2}\nHOST: {3}\nFORM: {4}\n}}" \
 				.format(self.url, self.method, self.path, self.host, self.isForm)

@@ -66,6 +66,7 @@ class ShlCmdInjAttackModule(AttackModule):
 		self.attack_report = None
 		if True not in (endpoint.is_form(), endpoint.has_query_string()):
 			print "    Target: {0}\n    Is not a form, nor a has a query string. Skipping!".format(endpoint.url)
+			print "    Finished attack -> Nothing found!\n"
 			return
 		
 		totalAttacks = len(ShlCmdInjAttackModule.attackPatterns)
@@ -88,10 +89,10 @@ class ShlCmdInjAttackModule(AttackModule):
 	
 	def launch_attack(self, endpoint, payload):
 		headers = {}
-		formData = self.get_form_data(endpoint)
+		formData = endpoint.get_form_data()
 		
 		for key in formData.keys():
-			formData = self.get_form_data(endpoint)
+			formData = endpoint.get_form_data()
 			formData[key] = payload
 			res = None
 			if endpoint.method.upper() == "GET":
@@ -105,14 +106,6 @@ class ShlCmdInjAttackModule(AttackModule):
 				return True
 
 		return False
-
-	def get_form_data(self, endpoint):
-		formData = {}
-		if endpoint.is_form():
-			formData = endpoint.get_form().get_form_data_dict()
-		elif endpoint.has_query_string():
-			formData = endpoint.get_query_string_dict()
-		return formData
 
 	def is_attack_successful(self, res):
 		if res.ok:
