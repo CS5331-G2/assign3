@@ -65,7 +65,7 @@ class OpenRedirAttackModule(AttackModule):
 
 				# Otherwise look for <script>
 				scriptTags = bs.findAll("script")
-				for script in scripts:
+				for script in scriptTags:
 					if len(re.findall('document\.location = "(.*?)";', str(script))) > 0:
 						matches = re.findall('document\.location = "(.*?)";', str(script))
 						for match in matches:
