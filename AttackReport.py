@@ -36,7 +36,7 @@ class AttackReport(object):
 		s = {}
 		s['class'] = obj.attackClass
 		s['id'] = obj.id
-		s['endpoint'] = obj.endpoint.url
+		s['originalEndpoint'] = obj.endpoint.url
 		s['method'] = obj.endpoint.method
 		s['params'] = obj.formData
 		s['headers'] = obj.headers
