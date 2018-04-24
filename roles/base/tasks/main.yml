@@ -28,14 +28,15 @@
 - name: Git clone our awesome scanner
   git:
     repo: 'https://github.com/CS5331-G2/assign3.git'
-    dest: /home/vagrant
-  when:
-    - clone_git
+    dest: /home/vagrant/assign3
+    version: master
+  when: setup_git_repo is defined and setup_git_repo
 
 - name: Copy html.zip to /home/vagrant
   copy:
     src: /Users/macos/Dropbox (Personal)/1. NUS/SourceCode/CS5331/assign3/html.zip
     dest: /home/vagrant
+  when: setup_local_repo is defined and setup_local_repo
 
 # - name: Unzip html.zip
 #   unarchive: 

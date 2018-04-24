@@ -1,12 +1,14 @@
 ---
 
-- name: Update {{ application_name }} codebase in production
+- name: Deploy {{ application_name }} codebase in production
   hosts: all
   become: yes
   become_user: root
   gather_facts: False
   vars:
     setup_git_repo: yes  # set to no for local development and map your local git repo in the Vagrantfile instead
+    setup_local_repo: no
+    update_apt_cache: yes
   vars_files:
     - env_vars/base.yml
     - env_vars/production.yml
